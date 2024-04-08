@@ -11,7 +11,7 @@ public class MultithreadedTCPEchoServer {
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     private static void handleClient(Socket clientSocket) {
-        try {
+        try (clientSocket) { // автоматически закрываем соединение после выполнения
             // Буфер для чтения данных
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -19,7 +19,6 @@ public class MultithreadedTCPEchoServer {
                 // Отправляем данные обратно клиенту
                 clientSocket.getOutputStream().write(buffer, 0, bytesRead);
             }
-            clientSocket.close(); // Закрываем соединение
         } catch (IOException ex) {
             ex.printStackTrace();
         }
